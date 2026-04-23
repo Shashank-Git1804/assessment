@@ -1,5 +1,6 @@
 import express from "express";
 import Batch from "../models/Batch.js";
+import User from "../models/User.js";
 import { protect, allow } from "../middleware/auth.js";
 import crypto from "crypto";
 
@@ -49,7 +50,14 @@ router.post("/:id/join", protect, allow("student"), async (req, res) => {
 
 router.get("/institution", protect, allow("institution"), async (req, res) => {
   try {
-    const batches = await Batch.find({ institutionId: req.user._id }).populate("students trainers", "name email");
+    const trainers = await User.find({ institutionId: req.user._id, role: "trainer" }, "_id");
+    const trainerIds = trainers.map((t) => t._id);
+    const batches = await Batch.find({
+      $or: [
+        { institutionId: req.user._id },
+        { trainers: { $in: trainerIds } },
+      ],
+    }).populate("students trainers", "name email");
     res.json(batches);
   } catch (err) {
     res.status(500).json({ message: err.message });
