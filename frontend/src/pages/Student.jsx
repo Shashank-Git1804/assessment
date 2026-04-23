@@ -39,16 +39,21 @@ export default function Student() {
         setMsg(err.message);
       });
 
-  const debugAllSessions = () =>
+  const debugAllSessions = () => {
+    const today = new Date().toISOString().split('T')[0];
+    console.log("Today's date:", today);
+    
     apiFetch("/sessions/all")
       .then((data) => {
         console.log("All sessions in database:", data);
-        setMsg(`Found ${data.length} total sessions in database. Check console for details.`);
+        console.log("Sessions for today:", data.filter(s => s.date === today));
+        setMsg(`Found ${data.length} total sessions. ${data.filter(s => s.date === today).length} for today (${today}). Check console.`);
       })
       .catch((err) => {
         console.log("Debug sessions error:", err.message);
         setMsg(err.message);
       });
+  };
   useEffect(() => {
     fetchSessions();
     fetchBatches();
