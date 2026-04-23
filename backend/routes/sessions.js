@@ -37,13 +37,29 @@ router.get("/active", protect, allow("student"), async (req, res) => {
     const today = new Date();
     const todayString = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
     
+    console.log("Looking for sessions on date:", todayString);
+    console.log("Student ID:", req.user._id);
+    
     const batches = await Batch.find({ students: req.user._id }, "_id");
+    console.log("Student batches:", batches);
     const batchIds = batches.map((b) => b._id);
     
     const sessions = await Session.find({ 
       batchId: { $in: batchIds },
       date: todayString
     });
+    console.log("Found sessions:", sessions);
+    res.json(sessions);
+  } catch (err) {
+    console.error("Sessions error:", err);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Debug route to see all sessions
+router.get("/all", protect, async (req, res) => {
+  try {
+    const sessions = await Session.find({}).populate('batchId', 'name');
     res.json(sessions);
   } catch (err) {
     res.status(500).json({ message: err.message });

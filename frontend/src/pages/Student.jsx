@@ -18,9 +18,37 @@ export default function Student() {
   const [msg, setMsg] = useState("");
 
   const fetchBatches = () =>
-    apiFetch("/batches/my").then(setBatches).catch((err) => setMsg(err.message));
+    apiFetch("/batches/my")
+      .then((data) => {
+        console.log("Fetched batches:", data);
+        setBatches(data);
+      })
+      .catch((err) => {
+        console.log("Batches error:", err.message);
+        setMsg(err.message);
+      });
+  
   const fetchSessions = () =>
-    apiFetch("/sessions/active").then(setSessions).catch((err) => setMsg(err.message));
+    apiFetch("/sessions/active")
+      .then((data) => {
+        console.log("Fetched sessions:", data);
+        setSessions(data);
+      })
+      .catch((err) => {
+        console.log("Sessions error:", err.message);
+        setMsg(err.message);
+      });
+
+  const debugAllSessions = () =>
+    apiFetch("/sessions/all")
+      .then((data) => {
+        console.log("All sessions in database:", data);
+        setMsg(`Found ${data.length} total sessions in database. Check console for details.`);
+      })
+      .catch((err) => {
+        console.log("Debug sessions error:", err.message);
+        setMsg(err.message);
+      });
   useEffect(() => {
     fetchSessions();
     fetchBatches();
@@ -99,6 +127,7 @@ export default function Student() {
       </form>
 
       <h2>Today's Active Sessions</h2>
+      <button onClick={debugAllSessions} style={{marginBottom: '10px', backgroundColor: '#f0f0f0'}}>Debug: Check All Sessions</button>
       {sessions.length === 0 ? (
         <p>No active sessions today.</p>
       ) : (
