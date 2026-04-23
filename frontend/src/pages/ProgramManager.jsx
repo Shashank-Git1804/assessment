@@ -7,15 +7,22 @@
 //     );
 // }
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { apiFetch } from "../api/api";
 import { useAuth } from "../context/AuthContext";
 
 export default function ProgramManager() {
   const { auth } = useAuth();
+  const [institutions, setInstitutions] = useState([]);
   const [institutionId, setInstitutionId] = useState("");
   const [summary, setSummary] = useState(null);
   const [msg, setMsg] = useState("");
+
+  useEffect(() => {
+    apiFetch("/institutions")
+      .then(setInstitutions)
+      .catch((err) => setMsg(err.message));
+  }, []);
 
   const fetchSummary = async (e) => {
     e.preventDefault();
@@ -30,6 +37,19 @@ export default function ProgramManager() {
       <h1>Programme Manager Dashboard</h1>
       <p>Welcome, {auth.user?.name}</p>
       {msg && <p style={{ color: "red" }}>{msg}</p>}
+
+      <h2>Institutions</h2>
+      {institutions.length === 0 ? (
+        <p>No institutions found.</p>
+      ) : (
+        <ul>
+          {institutions.map((inst) => (
+            <li key={inst._id}>
+              {inst.name} ({inst.email}) - ID: {inst._id}
+            </li>
+          ))}
+        </ul>
+      )}
 
       <h2>Institution Summary</h2>
       <form onSubmit={fetchSummary}>

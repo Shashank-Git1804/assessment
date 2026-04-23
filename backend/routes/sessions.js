@@ -35,18 +35,14 @@ router.get(
 router.get("/active", protect, allow("student"), async (req, res) => {
   try {
     const today = new Date();
-    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+    const todayString = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
     
     const batches = await Batch.find({ students: req.user._id }, "_id");
     const batchIds = batches.map((b) => b._id);
     
     const sessions = await Session.find({ 
       batchId: { $in: batchIds },
-      date: {
-        $gte: startOfDay,
-        $lt: endOfDay
-      }
+      date: todayString
     });
     res.json(sessions);
   } catch (err) {

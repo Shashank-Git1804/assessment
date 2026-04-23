@@ -2,9 +2,21 @@ import express from "express";
 import Batch from "../models/Batch.js";
 import Attendance from "../models/Attendance.js";
 import Session from "../models/Session.js";
+import User from "../models/User.js";
 import { protect, allow } from "../middleware/auth.js";
 
 const router = express.Router();
+
+// Get all institutions
+router.get("/", protect, allow("programme-manager"), async (req, res) => {
+  try {
+    const institutions = await User.find({ role: "institution" }, "name email");
+    res.json(institutions);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 router.get(
   "/:id/summary",
   protect,
