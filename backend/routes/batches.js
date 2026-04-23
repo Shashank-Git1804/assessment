@@ -6,7 +6,6 @@ import crypto from "crypto";
 const router = express.Router();
 
 router.post("/", protect, allow("trainer", "institution"), async (req, res) => {
-  router.post("/", protect, allow("trainer", "institution"), async (req, res) => {
   try {
     const batchData = {
       ...req.body,

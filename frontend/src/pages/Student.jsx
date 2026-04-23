@@ -66,7 +66,9 @@ export default function Student() {
       ) : (
         <ul>
           {batches.map((b) => (
-            <li key={b._id}>{b.name} <small style={{ color: "gray" }}>({b._id})</small></li>
+            <li key={b._id}>
+              {b.name} <small style={{ color: "gray" }}>({b._id})</small>
+            </li>
           ))}
         </ul>
       )}
@@ -78,7 +80,9 @@ export default function Student() {
           <input
             id="batchId"
             value={joinForm.batchId}
-            onChange={(e) => setJoinForm({ ...joinForm, batchId: e.target.value })}
+            onChange={(e) =>
+              setJoinForm({ ...joinForm, batchId: e.target.value })
+            }
             required
           />
         </div>
@@ -114,7 +118,12 @@ export default function Student() {
                 <td>{s.startTime}</td>
                 <td>{s.endTime}</td>
                 <td>
-                  <button onClick={() => markAttendance(s._id, "present")}>Present</button>
+                  <button onClick={() => markAttendance(s._id, "present")}>
+                    Present
+                  </button>{" "}
+                  <button onClick={() => markAttendance(s._id, "late")}>
+                    Late
+                  </button>
                 </td>
               </tr>
             ))}
