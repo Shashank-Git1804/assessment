@@ -17,8 +17,8 @@ export default function Institution() {
 
   useEffect(() => {
     apiFetch("/batches/institution")
-      .then(setBatches)
-      .catch((err) => setMsg(err.message));
+      .then((data) => { console.log("batches:", data); setBatches(data); })
+      .catch((err) => { console.log("error:", err.message); setMsg(err.message); });
   }, []);
 
   return (
