@@ -21,6 +21,7 @@ export default function Institution() {
     e.preventDefault();
     try {
       const data = await apiFetch(`/batches/${batchId}/summary`);
+      console.log(data)
       setSummary(data);
     } catch (err) { setMsg(err.message); }
   };
