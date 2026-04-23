@@ -47,6 +47,15 @@ router.post("/:id/join", protect, allow("student"), async (req, res) => {
   }
 });
 
+router.get("/institution", protect, allow("institution"), async (req, res) => {
+  try {
+    const batches = await Batch.find({ institutionId: req.user._id }).populate("students trainers", "name email");
+    res.json(batches);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 router.get("/my", protect, allow("student"), async (req, res) => {
   try {
     const batches = await Batch.find({ students: req.user._id }, "name _id");
