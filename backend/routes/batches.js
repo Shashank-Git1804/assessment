@@ -89,8 +89,6 @@ router.get("/:id/summary", protect, allow("institution"), async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
-// Add a route to get all batches for debugging
 router.get("/all", protect, async (req, res) => {
   try {
     const batches = await Batch.find({}).populate('students', 'name email').populate('trainers', 'name email');

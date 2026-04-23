@@ -77,7 +77,7 @@ router.get("/all", protect, async (req, res) => {
 router.get("/active", protect, allow("student"), async (req, res) => {
   try {
     const today = new Date();
-    const todayString = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    const todayString = today.toISOString().split('T')[0];
     
     console.log("Looking for sessions on date:", todayString);
     console.log("Student ID:", req.user._id);
