@@ -52,6 +52,10 @@ router.get("/institution", protect, allow("institution"), async (req, res) => {
   try {
     const trainers = await User.find({ institutionId: req.user._id, role: "trainer" }, "_id");
     const trainerIds = trainers.map((t) => t._id);
+    const allBatches = await Batch.find({});
+    console.log("Institution _id:", req.user._id);
+    console.log("Trainer IDs linked to institution:", trainerIds);
+    console.log("All batches in DB:", JSON.stringify(allBatches.map(b => ({ name: b.name, institutionId: b.institutionId, trainers: b.trainers }))));
     const batches = await Batch.find({
       $or: [
         { institutionId: req.user._id },
