@@ -71,28 +71,6 @@ export default function Trainer() {
     }
   };
 
-  const createTestSession = async () => {
-    const today = new Date().toISOString().split('T')[0];
-    const testSession = {
-      title: "Test Session",
-      date: today,
-      startTime: "10:00",
-      endTime: "11:00",
-      batchId: session.batchId || "ENTER_BATCH_ID_HERE"
-    };
-    
-    try {
-      const data = await apiFetch("/sessions", {
-        method: "POST",
-        body: JSON.stringify(testSession),
-      });
-      console.log(data);
-      setMsg(`Test session created for today (${today}): ${data.title} (ID: ${data._id})`);
-    } catch (err) {
-      setMsg(err.message);
-    }
-  };
-
   const fetchAttendance = async (e) => {
     e.preventDefault();
     console.log(attendanceSessionId);
@@ -147,7 +125,6 @@ export default function Trainer() {
       )}
 
       <h2>Create Session</h2>
-      <button onClick={createTestSession} style={{marginBottom: '10px', backgroundColor: '#e0ffe0'}}>Quick: Create Test Session for Today</button>
       <form onSubmit={createSession}>
         <div className="form-row">
           <label htmlFor="sessionTitle">Title</label>

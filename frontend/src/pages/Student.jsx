@@ -38,22 +38,6 @@ export default function Student() {
         console.log("Sessions error:", err.message);
         setMsg(err.message);
       });
-
-  const debugAllSessions = () => {
-    const today = new Date().toISOString().split('T')[0];
-    console.log("Today's date:", today);
-    
-    apiFetch("/sessions/all")
-      .then((data) => {
-        console.log("All sessions in database:", data);
-        console.log("Sessions for today:", data.filter(s => s.date === today));
-        setMsg(`Found ${data.length} total sessions. ${data.filter(s => s.date === today).length} for today (${today}). Check console.`);
-      })
-      .catch((err) => {
-        console.log("Debug sessions error:", err.message);
-        setMsg(err.message);
-      });
-  };
   useEffect(() => {
     fetchSessions();
     fetchBatches();
@@ -132,7 +116,6 @@ export default function Student() {
       </form>
 
       <h2>Today's Active Sessions</h2>
-      <button onClick={debugAllSessions} style={{marginBottom: '10px', backgroundColor: '#f0f0f0'}}>Debug: Check All Sessions</button>
       {sessions.length === 0 ? (
         <p>No active sessions today.</p>
       ) : (

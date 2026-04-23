@@ -56,14 +56,4 @@ router.get("/active", protect, allow("student"), async (req, res) => {
   }
 });
 
-// Debug route to see all sessions
-router.get("/all", protect, async (req, res) => {
-  try {
-    const sessions = await Session.find({}).populate('batchId', 'name');
-    res.json(sessions);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
 export default router;
