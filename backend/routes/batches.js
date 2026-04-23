@@ -6,16 +6,24 @@ import crypto from "crypto";
 const router = express.Router();
 
 router.post("/", protect, allow("trainer", "institution"), async (req, res) => {
+  router.post("/", protect, allow("trainer", "institution"), async (req, res) => {
   try {
-    const batch = await Batch.create({
+    const batchData = {
       ...req.body,
       institutionId: req.user.institutionId || req.user._id,
-    });
+    };
+   
+    if (req.user.role === "trainer") {
+      batchData.trainers = [req.user._id];
+    }
+    
+    const batch = await Batch.create(batchData);
     res.status(201).json(batch);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
+
 
 router.post("/:id/invite", protect, allow("trainer"), async (req, res) => {
   try {
