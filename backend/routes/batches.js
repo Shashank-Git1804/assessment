@@ -38,12 +38,22 @@ router.post("/:id/invite", protect, allow("trainer"), async (req, res) => {
 router.post("/:id/join", protect, allow("student"), async (req, res) => {
   try {
     const { code } = req.body;
+    console.log(`Student ${req.user._id} trying to join batch ${req.params.id} with code ${code}`);
     const batch = await Batch.findOne({ _id: req.params.id, inviteCode: code });
-    if (!batch) return res.status(400).json({ message: "Invalid invite code" });
-    if (!batch.students.includes(req.user._id)) batch.students.push(req.user._id);
+    if (!batch) {
+      console.log("Invalid invite code or batch not found");
+      return res.status(400).json({ message: "Invalid invite code" });
+    }
+    if (!batch.students.includes(req.user._id)) {
+      batch.students.push(req.user._id);
+      console.log("Student added to batch");
+    } else {
+      console.log("Student already in batch");
+    }
     await batch.save();
     res.json({ message: "Joined batch", batch });
   } catch (err) {
+    console.error("Join batch error:", err);
     res.status(500).json({ message: err.message });
   }
 });
@@ -61,9 +71,12 @@ router.get("/institution", protect, allow("institution"), async (req, res) => {
 
 router.get("/my", protect, allow("student"), async (req, res) => {
   try {
+    console.log("Fetching batches for student:", req.user._id);
     const batches = await Batch.find({ students: req.user._id }, "name _id");
+    console.log("Found batches:", batches);
     res.json(batches);
   } catch (err) {
+    console.error("Batches fetch error:", err);
     res.status(500).json({ message: err.message });
   }
 });
@@ -72,6 +85,16 @@ router.get("/:id/summary", protect, allow("institution"), async (req, res) => {
   try {
     const batch = await Batch.findById(req.params.id).populate("students trainers");
     res.json(batch);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Add a route to get all batches for debugging
+router.get("/all", protect, async (req, res) => {
+  try {
+    const batches = await Batch.find({}).populate('students', 'name email').populate('trainers', 'name email');
+    res.json(batches);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

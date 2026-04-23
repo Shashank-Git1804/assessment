@@ -28,16 +28,33 @@ export default function Student() {
         setMsg(err.message);
       });
   
-  const fetchSessions = () =>
+  const fetchSessions = () => {
+    console.log("Fetching active sessions...");
     apiFetch("/sessions/active")
       .then((data) => {
         console.log("Fetched sessions:", data);
         setSessions(data);
+        if (data.length === 0) {
+          setMsg("No active sessions found for today. Make sure you've joined a batch and there are sessions scheduled.");
+        }
       })
       .catch((err) => {
         console.log("Sessions error:", err.message);
-        setMsg(err.message);
+        setMsg(`Sessions error: ${err.message}`);
       });
+  };
+  const debugStudentData = () => {
+    apiFetch("/sessions/debug")
+      .then((data) => {
+        console.log("Debug data:", data);
+        setMsg(`Debug: Found ${data.batches.length} batches, ${data.allSessions.length} total sessions today, ${data.studentSessions.length} sessions for your batches`);
+      })
+      .catch((err) => {
+        console.log("Debug error:", err.message);
+        setMsg(`Debug error: ${err.message}`);
+      });
+  };
+
   useEffect(() => {
     fetchSessions();
     fetchBatches();
@@ -79,7 +96,7 @@ export default function Student() {
 
       <h2>My Batches</h2>
       {batches.length === 0 ? (
-        <p>You haven't joined any batch yet.</p>
+        <p>You haven't joined any batch yet. Join a batch to see active sessions.</p>
       ) : (
         <ul>
           {batches.map((b) => (
@@ -89,6 +106,10 @@ export default function Student() {
           ))}
         </ul>
       )}
+      
+      <button onClick={debugStudentData} style={{ marginBottom: "10px" }}>
+        Debug Student Data
+      </button>
 
       <h2>Join Batch</h2>
       <form onSubmit={joinBatch}>
