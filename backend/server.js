@@ -13,6 +13,7 @@ app.use(express.json());
 const allowedOrigins = [
   process.env.CLIENT_URL,
   process.env.CLIENT_URL_LOCAL,
+  "https://assessment-one-rho.vercel.app",
   "https://assessment-mtbquoaqb-shashank-git1804s-projects.vercel.app",
   "https://role-based-authorization.netlify.app"
 ].filter(Boolean);
