@@ -107,9 +107,9 @@ export default function Student() {
         </ul>
       )}
       
-      <button onClick={debugStudentData} style={{ marginBottom: "10px" }}>
+      {/* <button onClick={debugStudentData} style={{ marginBottom: "10px" }}>
         Debug Student Data
-      </button>
+      </button> */}
 
       <h2>Join Batch</h2>
       <form onSubmit={joinBatch}>
