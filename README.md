@@ -4,7 +4,7 @@ A role-based attendance management system with 5 distinct user roles: Student, T
 
 ## 🌐 Live URLs
 
-- **Frontend**: https://role-based-authorization.netlify.app/ (or) https://assessment-one-rho.vercel.app/
+- **Frontend**: https://assessment-one-rho.vercel.app/
 - **Backend API**: https://assessment-96h4.onrender.com/
 - **API Base URL**: `https://assessment-96h4.onrender.com/api`
 
@@ -24,22 +24,20 @@ You can use these accounts to test each role:
 
 ### Deployment Requirements vs Implementation
 **Task 4 specified**: Vercel + Railway/Render + PostgreSQL/Neon + Clerk  
-**Actually implemented**: Netlify + Render + MongoDB Atlas + JWT
+**Actually implemented**: Vercel + Render + MongoDB Atlas + JWT
 
 **Why the deviations**:
-- **Netlify over Vercel**: Both are equivalent static hosting platforms. Netlify was chosen for its simpler deployment process and better free tier and I am comfortable with it 
-- **Render over Railway**: Render was used for backend deployment, works seamlessly with MongoDB Atlasand I am comfortable with it
-- **MongoDB over PostgreSQL**: AS I am MERN developer MongoDB feels relatable
-- **JWT over Clerk**: I'm very much comfortable with JWT than clerk
+- **Vercel**: Used as specified for frontend deployment
+- **Render**: Used for backend deployment, works seamlessly with MongoDB Atlas
+- **MongoDB over PostgreSQL**: Project was built with MongoDB schemas from the start. Migration to PostgreSQL would require complete data model rewrite
+- **JWT over Clerk**: Custom JWT implementation provides more control over auth flow and avoids external service dependencies
 
 ### Deployment Status: ✅ FULLY FUNCTIONAL
 All components are live and working.
 
 ### Deployment Issues Encountered & Fixed
-1. **CORS Mismatch**: Netlify URL changed during deployment. Fixed by updating `CLIENT_URL` in Render environment variables
-2. **Institution Batches Empty**: Complex query logic was failing. Simplified to direct `institutionId` lookup
-3. **Trainer Auto-Assignment**: Trainers weren't being added to batches they created. Fixed by auto-adding trainer to `trainers` array on batch creation
-4. **Missing Institution Endpoint**: Added `/api/batches/institution` endpoint to fetch all batches for an institution
+1. **CORS Mismatch**: Vercel URL changed during deployment. Fixed by updating `CLIENT_URL` in Render environment variables and adding multiple allowed origins
+2. **SPA Routing**: Added `vercel.json` with rewrites to handle React Router on Vercel
 
 ## 🚀 Local Setup Instructions
 
@@ -120,7 +118,7 @@ npm run dev  # Starts on http://localhost:5173
 - **React 19**: Latest React with modern hooks
 - **React Router 7**: Client-side routing
 - **Vite**: Fast build tool and dev server
-- **Netlify**: Static site deployment with automatic builds
+- **Vercel**: Static site deployment with automatic builds
 
 ### Database
 - **MongoDB Atlas**: Cloud-hosted MongoDB with free tier
@@ -130,7 +128,7 @@ npm run dev  # Starts on http://localhost:5173
 - **MongoDB over PostgreSQL**: Flexible schemas, faster prototyping, no complex migrations
 - **JWT over Clerk**: More control over auth flow, no external dependencies, simpler implementation
 - **Render over Railway**: Better free tier for backend, easier MongoDB integration
-- **Netlify**: Simple deployment, automatic builds from Git, great for React apps
+- **Vercel**: Industry standard for React deployments, excellent performance
 
 ## ✅ What's Working
 
@@ -152,19 +150,19 @@ npm run dev  # Starts on http://localhost:5173
 ## 🔧 Deployment Process
 
 ### What Worked
-- ✅ Frontend deployed to Netlify successfully with automatic builds
+- ✅ Frontend deployed to Vercel successfully with automatic builds
 - ✅ Backend deployed to Render with MongoDB Atlas connection
 - ✅ Environment variables configured correctly on both platforms
-- ✅ CORS configured for cross-origin requests between Netlify and Render
+- ✅ CORS configured for cross-origin requests between Vercel and Render
 - ✅ MongoDB Atlas connection string working with URL encoding
-- ✅ `_redirects` file for Netlify
+- ✅ `vercel.json` for SPA routing
 
 ### Deployment Steps Taken
-1. **Frontend (Netlify)**:
+1. **Frontend (Vercel)**:
    - Connected GitHub repository
    - Set build command: `npm run build`
-   - Set publish directory: `dist`
-   - Added `_redirects` file for redirecting
+   - Set output directory: `dist`
+   - Added `vercel.json` for SPA routing
    - Added environment variable: `VITE_API_URL`
 
 2. **Backend (Render)**:
