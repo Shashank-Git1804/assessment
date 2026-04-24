@@ -4,7 +4,7 @@ A role-based attendance management system with 5 distinct user roles: Student, T
 
 ## 🌐 Live URLs
 
-- **Frontend**: https://role-based-authorization.netlify.app/
+- **Frontend**: https://role-based-authorization.netlify.app/ (or) https://assessment-740kgxdm2-shashank-git1804s-projects.vercel.ap/
 - **Backend API**: https://assessment-96h4.onrender.com/
 - **API Base URL**: `https://assessment-96h4.onrender.com/api`
 
