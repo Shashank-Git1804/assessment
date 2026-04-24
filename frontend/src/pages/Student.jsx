@@ -43,17 +43,17 @@ export default function Student() {
         setMsg(`Sessions error: ${err.message}`);
       });
   };
-  const debugStudentData = () => {
-    apiFetch("/sessions/debug")
-      .then((data) => {
-        console.log("Debug data:", data);
-        setMsg(`Debug: Found ${data.batches.length} batches, ${data.allSessions.length} total sessions today, ${data.studentSessions.length} sessions for your batches`);
-      })
-      .catch((err) => {
-        console.log("Debug error:", err.message);
-        setMsg(`Debug error: ${err.message}`);
-      });
-  };
+  // const debugStudentData = () => {
+  //   apiFetch("/sessions/debug")
+  //     .then((data) => {
+  //       console.log("Debug data:", data);
+  //       setMsg(`Debug: Found ${data.batches.length} batches, ${data.allSessions.length} total sessions today, ${data.studentSessions.length} sessions for your batches`);
+  //     })
+  //     .catch((err) => {
+  //       console.log("Debug error:", err.message);
+  //       setMsg(`Debug error: ${err.message}`);
+  //     });
+  // };
 
   useEffect(() => {
     fetchSessions();
