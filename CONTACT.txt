@@ -1,0 +1,6 @@
+Full Name: Shashank P
+Email: shashank182004@gmail.com
+Phone: +91-8147220887
+GitHub Profile: https://github.com/Shashank-Git1804
+
+Most Challenging Part: Implementing proper date filtering for session queries and ensuring batch membership validation before allowing students to mark attendance, as it required careful handling of Date objects and complex query logic across multiple collections.

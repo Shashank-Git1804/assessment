@@ -9,7 +9,23 @@ import institutionRoutes from "./routes/institution.js";
 
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: process.env.CLIENT_URL }));
+
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.CLIENT_URL_LOCAL,
+  "https://assessment-mtbquoaqb-shashank-git1804s-projects.vercel.app",
+  "https://role-based-authorization.netlify.app"
+].filter(Boolean);
+
+app.use(cors({ 
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed'));
+    }
+  }
+}));
 const port = process.env.PORT || 3000;
 app.use("/api/auth", authRoutes);
 app.use("/api/batches", batchRoutes);
