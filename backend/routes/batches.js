@@ -58,6 +58,17 @@ router.post("/:id/join", protect, allow("student"), async (req, res) => {
   }
 });
 
+router.get("/available", protect, allow("student"), async (req, res) => {
+  try {
+    const batches = await Batch.find({ inviteCode: { $exists: true, $ne: null } })
+      .populate("trainers", "name")
+      .select("_id name trainers");
+    res.json(batches);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 router.get("/institution", protect, allow("institution"), async (req, res) => {
   try {
     const batches = await Batch.find({ 
@@ -69,10 +80,16 @@ router.get("/institution", protect, allow("institution"), async (req, res) => {
   }
 });
 
-router.get("/my", protect, allow("student"), async (req, res) => {
+router.get("/my", protect, allow("student", "trainer"), async (req, res) => {
   try {
-    console.log("Fetching batches for student:", req.user._id);
-    const batches = await Batch.find({ students: req.user._id }, "name _id");
+    let batches;
+    if (req.user.role === "student") {
+      console.log("Fetching batches for student:", req.user._id);
+      batches = await Batch.find({ students: req.user._id }, "name _id");
+    } else if (req.user.role === "trainer") {
+      console.log("Fetching batches for trainer:", req.user._id);
+      batches = await Batch.find({ trainers: req.user._id }, "name _id students");
+    }
     console.log("Found batches:", batches);
     res.json(batches);
   } catch (err) {
@@ -89,6 +106,7 @@ router.get("/:id/summary", protect, allow("institution"), async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
 router.get("/all", protect, async (req, res) => {
   try {
     const batches = await Batch.find({}).populate('students', 'name email').populate('trainers', 'name email');

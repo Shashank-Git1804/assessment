@@ -9,32 +9,30 @@ const router = express.Router();
 router.post("/mark", protect, allow("student"), async (req, res) => {
   try {
     const { sessionId, status } = req.body;
+    console.log("Mark attendance:", { sessionId, status, studentId: req.user._id });
 
     const session = await Session.findById(sessionId);
     if (!session) return res.status(404).json({ message: "Session not found" });
 
-    const batch = await Batch.findOne({
-      _id: session.batchId,
-      students: req.user._id,
-    });
-    if (!batch)
-      return res
-        .status(403)
-        .json({ message: "You have not joined this batch" });
+    const batch = await Batch.findOne({ _id: session.batchId, students: req.user._id });
+    if (!batch) return res.status(403).json({ message: "You have not joined this batch" });
 
-    const existing = await Attendance.findOne({
-      sessionId,
-      studentId: req.user._id,
-    });
-    if (existing)
-      return res.status(400).json({ message: "Attendance already marked" });
+    const existing = await Attendance.findOne({ sessionId, studentId: req.user._id });
+    console.log("Existing record:", existing);
+    if (existing) return res.status(400).json({ message: "Attendance already marked" });
 
-    const record = await Attendance.create({
-      sessionId,
-      studentId: req.user._id,
-      status,
-    });
+    const record = await Attendance.create({ sessionId, studentId: req.user._id, status });
     res.status(201).json(record);
+  } catch (err) {
+    console.error("Mark attendance error:", err.message);
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.get("/my", protect, allow("student"), async (req, res) => {
+  try {
+    const records = await Attendance.find({ studentId: req.user._id }, "sessionId status");
+    res.json(records);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

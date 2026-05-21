@@ -9,8 +9,13 @@ import ProgramManager from "./pages/ProgramManager";
 import Institution from "./pages/Institution";
 import Trainer from "./pages/Trainer";
 import Student from "./pages/Student";
+import Preview from "./Preview";
 
 const router = createBrowserRouter([
+  {
+    path: "/preview",
+    element: <Preview />,
+  },
   {
     path: "/",
     element: <AppLayout />,

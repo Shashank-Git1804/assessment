@@ -27,21 +27,23 @@ export default function Login() {
   };
 
   return (
-    <>
-      <h1>Login</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleOnSubmit}>
-        <div className="form-row">
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" name="email" value={value.email} onChange={handleOnChange} required />
-        </div>
-        <div className="form-row">
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" name="password" value={value.password} onChange={handleOnChange} required />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      <p>New User? <NavLink to="/register">Register here</NavLink></p>
-    </>
+    <div className="container flex-center" style={{ minHeight: '100vh' }}>
+      <div className="card" style={{ maxWidth: '400px', width: '100%' }}>
+        <h1 style={{ textAlign: 'center', marginTop: 0 }}>Login</h1>
+        {error && <div className="alert alert-error">{error}</div>}
+        <form onSubmit={handleOnSubmit}>
+          <div className="form-row">
+            <label htmlFor="email">Email</label>
+            <input type="email" id="email" name="email" value={value.email} onChange={handleOnChange} placeholder="your@email.com" required />
+          </div>
+          <div className="form-row">
+            <label htmlFor="password">Password</label>
+            <input type="password" id="password" name="password" value={value.password} onChange={handleOnChange} placeholder="••••••••" required />
+          </div>
+          <button type="submit" style={{ width: '100%' }}>Login</button>
+        </form>
+        <p style={{ textAlign: 'center', marginTop: '1.5rem' }}>New User? <NavLink to="/register">Register here</NavLink></p>
+      </div>
+    </div>
   );
 }
